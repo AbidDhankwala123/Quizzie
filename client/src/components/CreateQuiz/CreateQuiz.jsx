@@ -397,7 +397,7 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
 
   };
 
-  const quizUrl = `${process.env.REACT_APP_FRONTEND_URL}/playQuiz/${localStorage.getItem("quizId")}`;
+  const quizUrl = `${process.env.REACT_APP_FRONTEND_URL}playQuiz/${localStorage.getItem("quizId")}`;
 
   const shareButton = () => {
     copy(quizUrl);

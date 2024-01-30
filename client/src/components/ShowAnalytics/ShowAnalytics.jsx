@@ -46,7 +46,7 @@ const ShowAnalytics = ({ setQuizType, setCreateQuizPopup, setCreateQuizPage, set
   }
 
   const handleShare = quiz => {
-    copy(`${process.env.REACT_APP_FRONTEND_URL}/playQuiz/${quiz._id}`);
+    copy(`${process.env.REACT_APP_FRONTEND_URL}playQuiz/${quiz._id}`);
     toast.success("Link copied to Clipboard",{
       position:"top-right",
       autoClose:1000
