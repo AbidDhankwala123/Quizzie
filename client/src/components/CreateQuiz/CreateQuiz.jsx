@@ -276,12 +276,14 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
       })
   }
 
-  const editQuiz = () => {
+  const editQuiz = async() => {
+
+      
+    await resetCountsToZeroIfAnyQuestionsChanged()
 
     //api call
     axios.put(`${process.env.REACT_APP_BACKEND_URL_FOR_QUIZ}/${quizId}`, { questionSets }, { headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("jwtToken") } })
       .then(response => {
-        console.log(response);
         listQuizzes();
         toast.success(response.data.message, {
           position: "top-center",
@@ -309,6 +311,68 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
       })
   }
 
+  const resetCountsToZeroIfAnyQuestionsChanged = async () => {
+
+    try {
+      // Get object from db
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL_FOR_QUIZ}/${quizId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("jwtToken")
+        }
+      });
+
+      
+      if (response.data && response.data.quiz && response.data.quiz.questionSets) {
+        const questionSetsFromDb = response.data.quiz.questionSets;
+
+        //Compare questionSets from db & questionSets from UI
+        questionSets.map((q, index) => {
+          if (isQuestionChanged(q, questionSetsFromDb[index])) {
+            //console.log("Question changed:", q);
+            q.totalAttempted = 0
+            q.totalCorrect = 0
+            q.totalIncorrect = 0
+            q.optionSets.forEach(o => o.optionPollCount = 0)
+          }
+        })
+      }
+
+    } catch (error) {
+      if (error.response.status === 401) {
+        toast.error("Invalid Session or Session expired. Please Log In again", {
+          position: "top-center",
+          autoClose: 2000
+        })
+        localStorage.clear();
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+        return;
+      }
+      toast.error(error.response.data.message, {
+        position: "top-center",
+        autoclose: 1000
+      });
+      console.error("Axios error:", error);
+    }
+  }
+
+  const isQuestionChanged = (q1, q2) => {
+    return (
+      q1.pollQuestion !== q2.pollQuestion ||
+      q1.optionSets.filter((o1, idx) => isOptionChanged(o1, q2.optionSets[idx])).length > 0
+    );
+  };
+
+  const isOptionChanged = (o1, o2) => {
+    return (
+      o1.optionText !== o2.optionText ||
+      o1.optionImageUrl !== o2.optionImageUrl ||
+      o1.isCorrectAnswer !== o2.isCorrectAnswer
+    );
+  };
+
   const handleCreateQuiz = () => {
 
     if (!validateRequiredFields()) {
@@ -320,10 +384,11 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
     }
 
     setDefaultOptionTypeValue()
-    console.log(createQuizObject);
+    //console.log(createQuizObject);
 
     if (quizId) {
       //Edit flow
+
       editQuiz()
     }
     else {
@@ -484,7 +549,7 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
             </div>}
 
           <div className={styles.cancel_createQuiz}>
-            <button className={styles.cancel_btn} onClick={() => { setCreateQuizPage(false) }}>Cancel</button>
+            <button className={styles.cancel_btn} onClick={() => { setCreateQuizPage(false); listQuizzes() }}>Cancel</button>
             <button className={styles.createQuiz_btn} onClick={handleCreateQuiz}>{quizId ? "Update Quiz" : "Create Quiz"}</button>
           </div>
         </div>

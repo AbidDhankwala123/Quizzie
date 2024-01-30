@@ -1,10 +1,8 @@
 .showAnalytics_container {
     width: 85vw;
     background: #EDEDED;
-    /* border: 3px solid red; */
     display: flex;
     flex-direction: column;
-    /* justify-content: space-evenly; */
     align-items: center;
     gap: 5%;
 }
@@ -16,28 +14,18 @@
 }
 
 table {
-    /* border: 3px solid red; */
     border-collapse: collapse;
-    /* overflow-y: auto; */
-    /* height: 80vh; */
     width: 60vw;
 }
-tbody {
-    /* height: 70vh; Set the height for the tbody */
-    /* overflow-y: auto; Add overflow property */
-    /* border: 3px solid red; */
-}
+
 td {
-    /* border: 3px solid red; */
     text-align: center;
     font-family: var(--font-family-poppins);
     font-weight: 600;
     padding: 0.5rem;
-    /* border: 2px solid transparent; */
-
 }
+
 td:first-child,th:first-child{
-    /* border: 3px solid green; */
     border-radius: 0.6rem 0 0 0.6rem;
 
 }
@@ -57,13 +45,8 @@ th {
     color: white;
     font-family: var(--font-family-poppins);
 }
-/* tbody>tr:nth-child(even)>td{
-    border-radius: 5rem;
 
-} */
 tbody>tr:nth-child(even) {
-    /* border-radius: 5rem; */
-    /* border: 2px solid orange; */
     background: #B3C4FF;
 }
 

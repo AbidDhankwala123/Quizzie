@@ -184,19 +184,19 @@ const Login = ({ logoutMessage, setLogoutMessage }) => {
         <form onSubmit={login ? handleSignUp : handleLogin}>
           {login && <><div>
             <label htmlFor="name" className={styles.name}>Name</label>
-            <input type="text" name="name" value={name} onChange={handleName} />
+            <input type="text" className={styles.name_input} name="name" value={name} onChange={handleName} />
           </div><br /></>}
           <div>
             <label htmlFor="email" className={styles.email}>Email</label>
-            <input type="email" name="email" value={email} onChange={handleEmail} />
+            <input type="email" className={styles.email_input} name="email" value={email} onChange={handleEmail} />
           </div><br />
           <div>
             <label htmlFor="password" className={styles.password}>Password</label>
-            <input type="text" name="password" value={password} onChange={handlePassword} />{/*later change to password*/}
+            <input type="password" className={styles.password_input} name="password" value={password} onChange={handlePassword} />
           </div><br />
           {login && <><div>
             <label htmlFor="confirmPassword" className={styles.confirmPassword}>Confirm Password</label>
-            <input type="text" name="confirmPassword" value={confirmPassword} onChange={handleConfirmPassword} />
+            <input type="password" className={styles.confirmPassword_input} name="confirmPassword" value={confirmPassword} onChange={handleConfirmPassword} />
           </div><br /><br /></>}
           <div>
             <button className={styles.signup_login_btn}>{login ? "Sign-Up" : "Login"}</button>

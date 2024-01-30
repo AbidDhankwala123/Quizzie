@@ -2,7 +2,7 @@ import React from 'react'
 import styles from "./ShowDashboard.module.css"
 import eyeIcon from "../../assets/eye_icon.png"
 
-const ShowDashboard = ({ dashboardQuizzes }) => {
+const ShowDashboard = ({ dashboardQuizzes,analyticsQuizzes }) => {
 
   const formatImpressions = (impressions) => {
     if (impressions >= 1000) {
@@ -18,7 +18,7 @@ const ShowDashboard = ({ dashboardQuizzes }) => {
       <div>
         <div className={styles.showDashboard_container_quiz_created}>
           <p>
-            <span>{dashboardQuizzes ? dashboardQuizzes.length : 0}</span>
+            <span>{analyticsQuizzes ? analyticsQuizzes.length : 0}</span>
             <span>Quiz</span>
           </p>
           <span>Created</span>
@@ -26,7 +26,7 @@ const ShowDashboard = ({ dashboardQuizzes }) => {
 
         <div className={styles.showDashboard_container_questions_created}>
           <p>
-            <span>{dashboardQuizzes ? dashboardQuizzes.map(quiz => quiz.questionSets.length).reduce((prev, curr) => prev + curr, 0):0}</span>
+            <span>{analyticsQuizzes ? analyticsQuizzes.map(quiz => quiz.questionSets.length).reduce((prev, curr) => prev + curr, 0):0}</span>
             <span>questions</span>
           </p>
           <span>Created</span>
@@ -34,7 +34,7 @@ const ShowDashboard = ({ dashboardQuizzes }) => {
 
         <div className={styles.showDashboard_container_total_impressions}>
           <p>
-            <span>{dashboardQuizzes ? formatImpressions(dashboardQuizzes.map(quiz => quiz.totalImpressions).reduce((prev, curr) => prev + curr, 0)):0}</span>
+            <span>{analyticsQuizzes ? formatImpressions(analyticsQuizzes.map(quiz => quiz.totalImpressions).reduce((prev, curr) => prev + curr, 0)):0}</span>
             <span>Total</span>
           </p>
           <span>Impressions</span>
@@ -43,10 +43,10 @@ const ShowDashboard = ({ dashboardQuizzes }) => {
       </div>
 
       <div>
-        {dashboardQuizzes && dashboardQuizzes.length>0 && <p className={styles.trending_quizs}>Trending Quizs</p>}
+        <p className={styles.trending_quizs}>Trending Quizs</p>
         <div className={styles.quizzes_displayed}>
 
-          {dashboardQuizzes && dashboardQuizzes.length>0 ? dashboardQuizzes.map((quiz, idx) => {
+          {dashboardQuizzes && dashboardQuizzes.length>0 && dashboardQuizzes.map((quiz, idx) => {
             const createdAtDate = new Date(quiz.createdAt);
             const formattedDate = `${String(createdAtDate.getDate()).padStart(2, '0')} ${createdAtDate.toLocaleString('default', { month: 'short' })}, ${String(createdAtDate.getFullYear())}`;
             return (
@@ -59,7 +59,7 @@ const ShowDashboard = ({ dashboardQuizzes }) => {
               </div>
             )
 
-          }):<p style={{color:"red",fontFamily:"var(--font-family-poppins)"}}>You haven't created any Quiz, Click on Create Quiz to create your first Quiz</p>}
+          })}
 
 
         </div>

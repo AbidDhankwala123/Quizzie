@@ -5,23 +5,26 @@ const mongoose = require("mongoose");
 const getAllQuizByUserId = async (req, res) => {
     try {
         const { quizOwnerId } = req.params;
-        
-        const dashboardQuizzes = await Quiz.find({ quizOwnerId })
-            .sort({ totalImpressions:-1 }); //sort by impressions desc
-        const analyticsQuizzes = await Quiz.find({ quizOwnerId })
-            .sort({ createdAt: 1 }); //sort by createdAt asc
 
+        // Get dashboard quizzes where totalImpressions > 10
+        const dashboardQuizzes = await Quiz.find({ quizOwnerId, totalImpressions: { $gt: 10 } })
+            .sort({ totalImpressions: -1 }); // sort by impressions desc
+
+        // Get all analytics quizzes
+        const analyticsQuizzes = await Quiz.find({ quizOwnerId })
+            .sort({ createdAt: 1 }); // sort by createdAt asc
 
         res.status(200).json({
             status: "SUCCESS",
             dashboardQuizzes,
             analyticsQuizzes
-        })
+        });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 //Get Quiz by id and increment impressions count by 1
 const getQuizByIdAndIncreaseImpressionsByOne = async (req, res) => {
@@ -50,10 +53,36 @@ const getQuizByIdAndIncreaseImpressionsByOne = async (req, res) => {
     }
 }
 
+const getQuizById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid ID format" });
+        }
+
+        const quiz = await Quiz.findById(id);
+        if (!quiz) {
+            return res.status(404).json({ message: "No such Quiz exist" });
+        }
+
+        res.status(200).json({
+            status: "SUCCESS",
+            quiz
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error.message })
+    }
+}
+
 //Create quiz
 const createQuiz = async (req, res) => {
     try {
         const { quizOwnerId, quizName, quizType, questionSets, timer } = req.body;
+
+        if(questionSets.length > 5){
+            return res.status(400).json({message:"Maximum 5 questions are allowed"});
+        }
 
         let invalidOptions = questionSets.filter(q => q.optionSets.filter(o => o.isCorrectAnswer).length === 0);
         console.log("invalidOptions= " + invalidOptions.length);
@@ -87,6 +116,14 @@ const updateQuiz = async (req, res, next) => {
 
         const quiz = await Quiz.findByIdAndUpdate(id, { questionSets });
 
+        if (!quiz) {
+            // No quiz found with the provided ID
+            return res.status(404).json({
+                status: "NOT_FOUND",
+                message: "No such quiz exist"
+            });
+        }
+
         res.json({
             status: "SUCCESS",
             message: "Quiz Updated Successfully",
@@ -116,31 +153,6 @@ const deleteQuiz = async (req, res, next) => {
     }
 
 }
-module.exports = { createQuiz, updateQuiz, deleteQuiz, getAllQuizByUserId, getQuizByIdAndIncreaseImpressionsByOne }
 
-/*
-"quizName": "Quiz 1",
-"quizType": "Q&A",
-"questionSets": [
-    {
-        "pollQuestion":"What is your name",
-        "optionType":"Text",
-        "optionSets":[
-            {
-                "optionText":"abc"
-            },
-            {
-                "optionText":"abc"
-            },
-            {
-                "optionText":"Abid",
-                "isCorrectAnswer":true
-            },
-            {
-                "optionText":"abc"
-            }
-        ]
-    }
-]
-*/
-// 65a8cd93af9bc19a895112c5
+
+module.exports = { createQuiz, updateQuiz, deleteQuiz, getAllQuizByUserId, getQuizById, getQuizByIdAndIncreaseImpressionsByOne }

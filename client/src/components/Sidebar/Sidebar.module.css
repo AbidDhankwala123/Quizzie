@@ -1,7 +1,6 @@
 .sidebar_container {
     height: 100vh;
     width: 15vw;
-    /* border: 3px solid red; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -21,10 +20,8 @@
 
 .sidebar_container_buttons {
     cursor: pointer;
-    /* border: 3px solid red; */
     color: var(--grey-color);
     font-family: var(--font-family-poppins);
-
     height: 23vh;
     display: flex;
     flex-direction: column;
@@ -40,12 +37,9 @@
     height: 0.2vh;
     width: 8vw;
     margin: 0 auto;
-    /* display: flex; */
-    /* justify-content: center; */
 }
 
 .sidebar_container_logout_div {
-    /* border: 3px solid blue; */
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -54,7 +48,6 @@
 }
 
 .sidebar_container_logout_div>div:last-child {
-    /* border: 3px solid blue; */
     cursor: pointer;
     color: var(--grey-color);
     font-family: var(--font-family-poppins);
@@ -63,7 +56,6 @@
 }
 
 .bg {
-    /* border: 3px solid blue; */
     height: 7vh;
     background-color: white;
     border-radius: 0.6rem;

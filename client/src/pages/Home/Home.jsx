@@ -116,7 +116,7 @@ const Home = ({ setLogoutMessage }) => {
         <Sidebar setCreateQuizPage={setCreateQuizPage} setCreateQuizPopup={setCreateQuizPopup} setQuestionSetsPopup={setQuestionSetsPopup} setQAAnalysis={setQAAnalysis} setPollAnalysis={setPollAnalysis} setDashboard={setDashboard} setAnalytics={setAnalytics} setLogoutMessage={setLogoutMessage} setQuizPublished={setQuizPublished} setQuizId={setQuizId} setQuizType={setQuizType} setQuestionSets={setQuestionSets} setTimer={setTimer} 
         setPollQuestion = {setPollQuestion} setOptionType={setOptionType} setOptionSets={setOptionSets}/>
 
-        {showDashboard && <ShowDashboard dashboardQuizzes={dashboardQuizzes} />}
+        {showDashboard && <ShowDashboard dashboardQuizzes={dashboardQuizzes} analyticsQuizzes={analyticsQuizzes}/>}
 
         {showAnalytics && <ShowAnalytics setDashboard={setDashboard} setAnalytics={setAnalytics} setQuizId={setQuizId} setQAAnalysis={setQAAnalysis} setPollAnalysis={setPollAnalysis} setDeletePopup={setDeletePopup} analyticsQuizzes={analyticsQuizzes} setQuiz={setQuiz} setCreateQuizPage={setCreateQuizPage} setQuestionSetsPopup={setQuestionSetsPopup} setCreateQuizPopup={setCreateQuizPopup} setQuizType={setQuizType} setQuestionSets={setQuestionSets} setTimer={setTimer} 
         setPollQuestion = {setPollQuestion} setOptionType={setOptionType} setOptionSets={setOptionSets} setQuizPublished={setQuizPublished} />}

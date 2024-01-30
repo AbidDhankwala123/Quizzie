@@ -13,8 +13,6 @@
     width: 80vw;
     border-radius: 10px;
     position: relative;
-    /* border: 3px solid red; */
-
 }
 
 .form_container>h1 {
@@ -28,13 +26,11 @@
 }
 
 .form_container>form {
-    /* border: 3px solid red; */
     width: 50vw;
     margin: 0 auto;
 }
 
 .btns_container {
-    /* border: 3px solid blue; */
     cursor: pointer;
     display: flex;
     text-align: center;
@@ -45,7 +41,6 @@
 
 .signup_btn,
 .login_btn {
-    /* border: 3px solid red; */
     font-weight: 600;
     padding: 1%;
     color: var(--grey-color);
@@ -59,20 +54,21 @@
 }
 
 .name {
-    margin-left: 17%;
+    margin-left: 6rem;
 }
 
 .email {
-    margin-left: 18%;
-
+    margin-left: 6.4rem;
 }
 
 .password {
-    margin-left: 12.4%;
+    margin-left: 4.3rem;
 }
 
-.name,.email,.password,.confirmPassword {
-    /* border: 3px solid red; */
+.name,
+.email,
+.password,
+.confirmPassword {
     color: var(--grey-color);
     font-weight: 600;
     font-family: var(--font-family-poppins);
@@ -80,8 +76,7 @@
 }
 
 form>div {
-    /* border: 3px solid black; */
-    padding-left: 11%;
+    padding-left: 3rem;
 }
 
 form>div>input {
@@ -93,7 +88,6 @@ form>div>input {
 }
 
 .signup_login_btn {
-    /* border: 3px solid blue; */
     cursor: pointer;
     background: #A9BCFF;
     color: var(--grey-color);

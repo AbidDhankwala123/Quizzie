@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Loader from '../../components/Loader/Loader';
 import QnAQuizResult from '../../components/QnAQuizResult/QnAQuizResult';
 import PollQuizResult from '../../components/PollQuizResult/PollQuizResult';
-import bird from "../../assets/bird.png"
 
 const Playquiz = () => {
 
@@ -25,7 +24,7 @@ const Playquiz = () => {
     let navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL_FOR_QUIZ}/${playQuizId}`)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL_FOR_QUIZ}/playQuiz/${playQuizId}`)
             .then(response => {
                 //console.log(response);
                 setQuizData(response.data.quiz);
@@ -60,7 +59,7 @@ const Playquiz = () => {
             } else {
                 // Timer reached 0, call next button i.e. handleNextForQandA
                 console.log("Timer reached 0");
-                // handleNextForQandA();
+                handleNextForQandA();
 
             }
         }
@@ -81,7 +80,17 @@ const Playquiz = () => {
                 console.log(response);
 
             })
-            .catch(error => console.error(error))
+            .catch(error => {
+                if (error.response.status === 404 || error.response.status === 400) {
+                    navigate("/notFound");
+                }
+                toast.error(error.response.data.message, {
+                    position: "top-center",
+                    autoclose: 1000
+                })
+                console.error(error)
+
+            })
     }
 
     const handleNextForQandA = () => {
@@ -149,8 +158,8 @@ const Playquiz = () => {
 
     return (
 
-        <div className={styles.parent}>
-            {showGameSection && <div className={styles.childBox}>
+        <div className={styles.playQuiz_container}>
+            {showGameSection && <div className={styles.play_quiz}>
 
                 <section className={styles.section_1}>
                     <span>{formattedIndex}/{totalQuestions}</span>
