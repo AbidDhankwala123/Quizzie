@@ -110,7 +110,7 @@ const Login = ({ logoutMessage, setLogoutMessage }) => {
     }
 
 
-    axios.post(`${process.env.REACT_APP_BACKEND_URL_FOR_AUTH}/register`, registerUserObject, { headers: { "Content-Type": "application/json" } })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL_FOR_AUTH}register`, registerUserObject, { headers: { "Content-Type": "application/json" } })
       .then(response => {
         console.log(response);
         toast.success(response.data.message, {
@@ -137,7 +137,7 @@ const Login = ({ logoutMessage, setLogoutMessage }) => {
       return;
     }
     
-    axios.post(`${process.env.REACT_APP_BACKEND_URL_FOR_AUTH}/login`, loginUserObject, { headers: { "Content-Type": "application/json" } })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL_FOR_AUTH}login`, loginUserObject, { headers: { "Content-Type": "application/json" } })
       .then(response => {
         console.log(response);
         localStorage.setItem("jwtToken", response.data.jwtToken);
