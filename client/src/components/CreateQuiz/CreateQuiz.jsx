@@ -429,7 +429,7 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
           <span className={`${styles.poll_type} ${active2 && styles.bgGreen}`} onClick={handlePollType}>Poll Type</span>
         </div>
         <div className={styles.btns_container}>
-          <button onClick={() => setCreateQuizPage(false)}>Cancel</button>
+          <button onClick={() => {setCreateQuizPage(false); listQuizzes();}}>Cancel</button>
           <button onClick={handleContinue}>Continue</button>
         </div>
       </div>}
@@ -566,7 +566,7 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
       </div>}
 
       {showQuizPublished && <div className={styles.quiz_published}>
-        <p onClick={() => setCreateQuizPage(false)}>x</p>
+        <p onClick={() => {setCreateQuizPage(false);listQuizzes();}}>x</p>
         <div>
           <p>Congrats your Quiz is published!</p>
           <div>

@@ -62,7 +62,7 @@ const DeletePopup = ({ setDeletePopup, quizId, listQuizzes }) => {
         <p>Are you confirm you want to delete?</p>
         <div className={styles.btn_container}>
           <button onClick={handleDelete}>{loading ? "Please Wait..." : "Confirm Delete"}</button>
-          <button onClick={() => setDeletePopup(false)}>Cancel</button>
+          <button onClick={() => {setDeletePopup(false);listQuizzes();}}>Cancel</button>
         </div>
       </div>
     </div>
