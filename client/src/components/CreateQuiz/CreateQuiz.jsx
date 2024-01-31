@@ -15,6 +15,8 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
   //console.log(questionSets);
   let navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const [quizName, setQuizName] = useState("");
   const [active1, setActive1] = useState(false);
   const [active2, setActive2] = useState(false);
@@ -268,11 +270,12 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
           }, 2000);
           return;
         }
-        console.log(error);
+        console.error(error);
         toast.error(error.response.data.message, {
           position: "top-center",
-          autoClose: 2000
+          autoClose: 1000
         });
+        setLoading(false);
       })
   }
 
@@ -306,8 +309,9 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
         console.log(error);
         toast.error(error.response.data.message, {
           position: "top-center",
-          autoClose: 2000
+          autoClose: 1000
         });
+        setLoading(false);
       })
   }
 
@@ -375,6 +379,10 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
 
   const handleCreateQuiz = () => {
 
+    if(loading){
+      return;
+    }
+
     if (!validateRequiredFields()) {
       toast.error("All fields are required", {
         position: "top-center",
@@ -382,6 +390,7 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
       })
       return;
     }
+    setLoading(true);
 
     setDefaultOptionTypeValue()
     //console.log(createQuizObject);
@@ -550,7 +559,7 @@ const CreateQuiz = ({ quizId, quizType, setQuizType, setCreateQuizPage, showCrea
 
           <div className={styles.cancel_createQuiz}>
             <button className={styles.cancel_btn} onClick={() => { setCreateQuizPage(false); listQuizzes() }}>Cancel</button>
-            <button className={styles.createQuiz_btn} onClick={handleCreateQuiz}>{quizId ? "Update Quiz" : "Create Quiz"}</button>
+            <button className={styles.createQuiz_btn} onClick={handleCreateQuiz}>{loading ? "Please Wait..." : quizId ? "Update Quiz" : "Create Quiz"}</button>
           </div>
         </div>
 

@@ -21,6 +21,9 @@ const Playquiz = () => {
     const [showPollQuizResult, setPollQuizResult] = useState(false);
     const [showGameSection, setGameSection] = useState(true);
 
+  const [loading, setLoading] = useState(false);
+
+
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -75,6 +78,11 @@ const Playquiz = () => {
     }
 
     const submitQuiz = () => {
+        if(loading){
+            return;
+        }
+        setLoading(true);
+
         axios.put(`${process.env.REACT_APP_BACKEND_URL_FOR_QUIZ}/playQuiz/${playQuizId}`, { questionSets: quizData.questionSets }, { headers: { "Content-Type": "application/json" } })
             .then(response => {
                 console.log(response);
@@ -88,7 +96,8 @@ const Playquiz = () => {
                     position: "top-center",
                     autoclose: 1000
                 })
-                console.error(error)
+                console.error(error);
+                setLoading(false);
 
             })
     }
@@ -188,7 +197,7 @@ const Playquiz = () => {
 
 
                 </section>
-                <button onClick={quizData.quizType === "Q&A" ? handleNextForQandA : handleNextForPoll}>{quizData.questionSets.length - 1 > currentIndex ? "Next" : "Submit"}</button>
+                <button onClick={quizData.quizType === "Q&A" ? handleNextForQandA : handleNextForPoll}>{loading ? "Please Wait..." : quizData.questionSets.length - 1 > currentIndex ? "Next" : "Submit"}</button>
             </div>}
 
             {showQnAQuizResult && <QnAQuizResult score={score} totalQuestions={quizData.questionSets.length} />}

@@ -72,6 +72,15 @@ const Home = ({ setLogoutMessage }) => {
 
   const quizOwnerId = localStorage.getItem("quizOwnerId");
 
+  const name = localStorage.getItem("userName").split(" ")[0];
+
+  useEffect(() => {
+    toast.success(`Welcome ${name}`,{
+      position:"top-center",
+      autoClose:2000
+    })
+  },[])
+
   const listQuizzes = () => {
     axios.get(`${process.env.REACT_APP_BACKEND_URL_FOR_QUIZ}/getAllQuiz/${quizOwnerId}`, {
       headers: {

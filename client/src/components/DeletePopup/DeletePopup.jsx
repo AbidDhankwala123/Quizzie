@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import styles from "./DeletePopup.module.css"
 import axios from "axios"
 import { toast } from "react-toastify"
@@ -6,11 +6,20 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router-dom'
 
 const DeletePopup = ({ setDeletePopup, quizId, listQuizzes }) => {
+
+  const [loading, setLoading] = useState(false);
+
   let navigate = useNavigate();
 
   console.log("quizId= "+quizId);
 
   const handleDelete = () => {
+    if(loading){
+      return;
+    }
+
+    setLoading(true);
+    
     axios.delete(`${process.env.REACT_APP_BACKEND_URL_FOR_QUIZ}/${quizId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -43,6 +52,7 @@ const DeletePopup = ({ setDeletePopup, quizId, listQuizzes }) => {
           position: "top-center",
           autoClose: 1000
         });
+        setLoading(false);
       })
   }
   
@@ -51,7 +61,7 @@ const DeletePopup = ({ setDeletePopup, quizId, listQuizzes }) => {
       <div className={styles.deleteQuiz_popup}>
         <p>Are you confirm you want to delete?</p>
         <div className={styles.btn_container}>
-          <button onClick={handleDelete}>Confirm Delete</button>
+          <button onClick={handleDelete}>{loading ? "Please Wait..." : "Confirm Delete"}</button>
           <button onClick={() => setDeletePopup(false)}>Cancel</button>
         </div>
       </div>

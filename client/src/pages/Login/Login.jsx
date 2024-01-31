@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Login = ({ logoutMessage, setLogoutMessage }) => {
 
   const [login, setLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -70,7 +71,7 @@ const Login = ({ logoutMessage, setLogoutMessage }) => {
   }
 
   const validateConfirmPassword = () => {
-    if(password !== confirmPassword){
+    if (password !== confirmPassword) {
       toast.error("Password and Confirm Password do not match", {
         position: "top-center",
         autoClose: 1000
@@ -79,7 +80,7 @@ const Login = ({ logoutMessage, setLogoutMessage }) => {
     }
     return false;
   }
-  
+
   const validateAllFields = () => {
     if (!name || !email || !password || !confirmPassword) {
       toast.error("All fields are required", {
@@ -105,58 +106,67 @@ const Login = ({ logoutMessage, setLogoutMessage }) => {
   const handleSignUp = e => {
     e.preventDefault();
 
+    if (loading) {
+      return
+    }
+
     if (validateAllFields() || validateName() || validateEmail() || validatePassword() || validateConfirmPassword()) {
       return;
     }
 
+    setLoading(true);
 
     axios.post(`${process.env.REACT_APP_BACKEND_URL_FOR_AUTH}register`, registerUserObject, { headers: { "Content-Type": "application/json" } })
       .then(response => {
-        console.log(response);
         toast.success(response.data.message, {
           position: "top-center",
           autoClose: 2000
         })
         setLogin(false);
+        setLoading(false);
+        setName("")
         setEmail("");
         setPassword("");
+        setConfirmPassword("");
       })
       .catch(error => {
         console.log(error);
         toast.error(error.response.data.message, {
           position: "top-center",
           autoClose: 2000
-        })
+        });
+        setLoading(false);
       })
   }
 
   const handleLogin = e => {
     e.preventDefault();
 
+
+    if (loading) {
+      return
+    }
+
+
     if (validateLoginFields() || validateEmail() || validatePassword()) {
       return;
     }
-    
+    setLoading(true);
+
     axios.post(`${process.env.REACT_APP_BACKEND_URL_FOR_AUTH}login`, loginUserObject, { headers: { "Content-Type": "application/json" } })
       .then(response => {
-        console.log(response);
         localStorage.setItem("jwtToken", response.data.jwtToken);
         localStorage.setItem("quizOwnerId", response.data.id);
         localStorage.setItem("userName", response.data.name);
-        toast.success(response.data.message, {
-          position: "top-center",
-          autoClose: 1000
-        })
-        setTimeout(() => {
-          navigate("/home");
-        }, 1000);
+        navigate("/home");
       })
       .catch(error => {
         console.log(error);
         toast.error(error.response.data.message, {
           position: "top-center",
           autoClose: 2000
-        })
+        });
+        setLoading(false);
       })
   }
 
@@ -168,16 +178,29 @@ const Login = ({ logoutMessage, setLogoutMessage }) => {
     setLogoutMessage("");
   }, [])
 
+  const handleSignUpButton = () => {
+    setLogin(true);
+    setName("")
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+  }
+
+  const handleLoginButton = () => {
+    setLogin(false);
+    setEmail("");
+    setPassword("");
+  }
 
   return (
     <div className={styles.login_container}>
       <div className={styles.form_container}>
         <h1>QUIZZIE</h1>
         <div className={styles.btns_container}>
-          <div className={`${styles.signup_btn} ${login && styles.shadow}`} onClick={() => setLogin(true)}>
+          <div className={`${styles.signup_btn} ${login && styles.shadow}`} onClick={handleSignUpButton}>
             Sign Up
           </div>
-          <div className={`${styles.login_btn} ${!login && styles.shadow}`} onClick={() => setLogin(false)}>
+          <div className={`${styles.login_btn} ${!login && styles.shadow}`} onClick={handleLoginButton}>
             Log In
           </div>
         </div>
@@ -199,7 +222,7 @@ const Login = ({ logoutMessage, setLogoutMessage }) => {
             <input type="password" className={styles.confirmPassword_input} name="confirmPassword" value={confirmPassword} onChange={handleConfirmPassword} />
           </div><br /><br /></>}
           <div>
-            <button className={styles.signup_login_btn}>{login ? "Sign-Up" : "Login"}</button>
+            <button className={styles.signup_login_btn}>{loading ? "Please Wait..." : login ? "Sign-Up" : "Login"}</button>
           </div>
         </form>
       </div>

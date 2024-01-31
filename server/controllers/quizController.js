@@ -90,11 +90,6 @@ const createQuiz = async (req, res) => {
             return res.status(400).json({ message: "Correct answer must be selected for Q&A" });
         }
 
-        invalidOptions = questionSets.filter(q => q.optionSets.length != 2 && q.optionSets.length != 4)
-        if (invalidOptions.length > 0) {
-            return res.status(400).json({ message: "Either 2 or 4 options are allowed" });
-        }
-
         const newQuiz = await Quiz.create({ quizOwnerId, quizName, quizType, questionSets, timer });
 
         res.status(200).json({
