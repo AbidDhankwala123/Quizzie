@@ -9,10 +9,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(cors());
+app.use(cors({
+    origin: [process.env.FRONTEND_URL],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}))
 
 app.use("/", require("./routes/userRoutes"));
-app.use("/api/quiz",require("./routes/quizRoutes"));
+app.use("/api/quiz", require("./routes/quizRoutes"));
 
 //Handling Error Midddleware
 app.use(checkError);
