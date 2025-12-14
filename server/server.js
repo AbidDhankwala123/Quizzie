@@ -16,6 +16,14 @@ app.use(cors({
     credentials: true
 }))
 
+app.get("/", (req, res) => {
+    res.status(200).json({
+        service: "Quiz Application",
+        status: "ACTIVE",
+        time: new Date(),
+    })
+})
+
 app.use("/", require("./routes/userRoutes"));
 app.use("/api/quiz", require("./routes/quizRoutes"));
 

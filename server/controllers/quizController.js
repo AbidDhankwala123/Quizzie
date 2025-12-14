@@ -1,5 +1,6 @@
 const Quiz = require("../models/quiz");
 const mongoose = require("mongoose");
+const AppError = require("../utils/AppError");
 
 //Get All Quiz
 const getAllQuizByUserId = async (req, res) => {
@@ -20,8 +21,7 @@ const getAllQuizByUserId = async (req, res) => {
             analyticsQuizzes
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message });
+        next(error);
     }
 };
 
@@ -31,12 +31,12 @@ const getQuizByIdAndIncreaseImpressionsByOne = async (req, res) => {
     try {
         const { id } = req.params;
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: "Invalid ID format" });
+            return next(new AppError("Invalid ID format", 400));
         }
 
         const quiz = await Quiz.findById(id);
         if (!quiz) {
-            return res.status(404).json({ message: "No such Quiz exist" });
+            return next(new AppError("No such Quiz exist", 404));
         }
 
         quiz.totalImpressions = quiz.totalImpressions + 1;
@@ -48,8 +48,7 @@ const getQuizByIdAndIncreaseImpressionsByOne = async (req, res) => {
             quiz
         })
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message })
+        next(error);
     }
 }
 
@@ -57,12 +56,12 @@ const getQuizById = async (req, res) => {
     try {
         const { id } = req.params;
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: "Invalid ID format" });
+            return next(new AppError("Invalid ID format", 400));
         }
 
         const quiz = await Quiz.findById(id);
         if (!quiz) {
-            return res.status(404).json({ message: "No such Quiz exist" });
+            return next(new AppError("No such Quiz exist", 404));
         }
 
         res.status(200).json({
@@ -70,8 +69,7 @@ const getQuizById = async (req, res) => {
             quiz
         })
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message })
+        next(error);
     }
 }
 
@@ -80,14 +78,14 @@ const createQuiz = async (req, res) => {
     try {
         const { quizOwnerId, quizName, quizType, questionSets, timer } = req.body;
 
-        if(questionSets.length > 5){
-            return res.status(400).json({message:"Maximum 5 questions are allowed"});
+        if (questionSets.length > 5) {
+            return next(new AppError("Maximum 5 questions are allowed", 400));
         }
 
         let invalidOptions = questionSets.filter(q => q.optionSets.filter(o => o.isCorrectAnswer).length === 0);
         console.log("invalidOptions= " + invalidOptions.length);
         if (quizType === "Q&A" && invalidOptions.length > 0) {
-            return res.status(400).json({ message: "Correct answer must be selected for Q&A" });
+            return next(new AppError("Correct answer must be selected for Q&A", 400));
         }
 
         const newQuiz = await Quiz.create({ quizOwnerId, quizName, quizType, questionSets, timer });
@@ -97,8 +95,7 @@ const createQuiz = async (req, res) => {
             quizId: newQuiz._id
         })
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message})
+        next(error);
 
     }
 }
@@ -112,11 +109,7 @@ const updateQuiz = async (req, res, next) => {
         const quiz = await Quiz.findByIdAndUpdate(id, { questionSets });
 
         if (!quiz) {
-            // No quiz found with the provided ID
-            return res.status(404).json({
-                status: "NOT_FOUND",
-                message: "No such quiz exist"
-            });
+            return next(new AppError("No such Quiz exist", 404));
         }
 
         res.json({
@@ -125,8 +118,7 @@ const updateQuiz = async (req, res, next) => {
             quiz
         })
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message })
+        next(error);
     }
 
 }
@@ -143,8 +135,7 @@ const deleteQuiz = async (req, res, next) => {
             message: "Quiz Deleted Successfully"
         })
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message })
+        next(error);
     }
 
 }

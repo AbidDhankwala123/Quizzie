@@ -1,12 +1,10 @@
 const checkError = (err, req, res, next) => {
-    console.error(err.stack);
+    console.error(err);
 
-    // Check for specific errors and handle them accordingly
-    if (err.name === 'ValidationError') {
-        // Handle Mongoose validation errors
-        return res.status(400).json({ error: err.message });
-    }
-    res.status(500).json({ message: "Something went wrong! Please try again after some time" })
+    const statusCode = err.statusCode ? err.statusCode : 500;
+    const errorMessage = err.message ? err.message : "Internal Server Error";
+
+    res.status(statusCode).json({ errorMessage });
 }
 
 module.exports = checkError

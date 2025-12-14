@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { checkHealth, registeredUser, loginUser } = require("../controllers/userController");
-
-router.get("/health", checkHealth);
+const { registeredUser, loginUser } = require("../controllers/userController");
 
 router.post("/register", registeredUser);
 
