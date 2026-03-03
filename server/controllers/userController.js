@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const AppError = require("../utils/AppError");
 
 //registered user
-const registeredUser = async (req, res) => {
+const registeredUser = async (req, res, next) => {
     try {
         const { name, email, password, confirmPassword } = req.body;
 

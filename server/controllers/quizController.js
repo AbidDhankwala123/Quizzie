@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const AppError = require("../utils/AppError");
 
 //Get All Quiz
-const getAllQuizByUserId = async (req, res) => {
+const getAllQuizByUserId = async (req, res, next) => {
     try {
         const { quizOwnerId } = req.params;
 
@@ -27,7 +27,7 @@ const getAllQuizByUserId = async (req, res) => {
 
 
 //Get Quiz by id and increment impressions count by 1
-const getQuizByIdAndIncreaseImpressionsByOne = async (req, res) => {
+const getQuizByIdAndIncreaseImpressionsByOne = async (req, res, next) => {
     try {
         const { id } = req.params;
         if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -52,7 +52,7 @@ const getQuizByIdAndIncreaseImpressionsByOne = async (req, res) => {
     }
 }
 
-const getQuizById = async (req, res) => {
+const getQuizById = async (req, res, next) => {
     try {
         const { id } = req.params;
         if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -74,7 +74,7 @@ const getQuizById = async (req, res) => {
 }
 
 //Create quiz
-const createQuiz = async (req, res) => {
+const createQuiz = async (req, res, next) => {
     try {
         const { quizOwnerId, quizName, quizType, questionSets, timer } = req.body;
 
